@@ -1,0 +1,82 @@
+mpc:
+  mpc_local_planner:
+    ros__parameters:
+      # Controller parameters: MPC horizon, cost weights, and limits
+      controller:
+        # N: prediction horizon length (number of discrete steps)
+        N: 12
+        # Q: state tracking weight vector [x_weight, y_weight, theta_weight]
+        Q: [10.0, 10.0, 0.25]
+        # R: control input weight vector [v_weight, omega_weight]
+        R: [0.2, 0.05]
+        # S: terminal state weight vector (applied to final state)
+        S: [2.0, 2.0, 0.5]
+        # T: discretization timestep [s] used by the kinematics and planner
+        T: 0.2
+        # omega_max / omega_min: angular velocity limits [rad/s]
+        omega_max: 0.7853981633974483
+        omega_min: -0.7853981633974483
+        # v_max / v_min: linear velocity limits [m/s]
+        v_max: 0.4
+        v_min: -0.1
+
+      # Costmap / obstacle penalty parameters
+      costmap:
+        # ahead_distances: distances ahead of the robot to sample obstacle cost [m]
+        ahead_distances: [0.0, 0.5, 1.0]
+        # power: exponent applied to the soft obstacle penalty
+        power: 2.0
+        # samples_per_circle: number of sample points around the robot footprint
+        samples_per_circle: 8
+        # thresh: soft threshold (0..1) where obstacle penalty starts to ramp up
+        thresh: 0.2
+        # topic: ROS topic where the occupancy grid / local costmap is published
+        topic: "/local_costmap/costmap"
+        # unknown_is_lethal: treat unknown map cells as obstacles when true
+        unknown_is_lethal: true
+        # weight: multiplier for the obstacle penalty in the total cost
+        weight: 300.0
+
+      # Goal / stopping behavior parameters
+      goal:
+        # slow_exp: exponent shaping how max speed scales when approaching goal
+        slow_exp: 1.0
+        # slow_radius: radius [m] within which the robot starts to slow down
+        slow_radius: 1.0
+        # stop_pos_tol: position tolerance [m] to consider the goal reached
+        stop_pos_tol: 0.12
+        # stop_yaw_deg: yaw tolerance [degrees] to consider the goal reached
+        stop_yaw_deg: 15.0
+        # terminal_boost: multiplier to increase terminal cost near the goal
+        terminal_boost: 5.0
+
+      # Obstacle sampling / footprint parameters
+      obstacle:
+        # safety_margin: additional margin [m] added to the robot footprint when sampling
+        safety_margin: 0.04
+
+      # Reference generation parameters
+      reference:
+        # lock_radius: within this radius the reference is locked to the goal pose
+        lock_radius: 0.5
+
+      # Robot frame and footprint settings
+      robot:
+        # base_frame: the robot's base frame id used for TF and commands
+        base_frame: "base_link"
+        # footprint_radius: nominal robot footprint radius [m]
+        footprint_radius: 0.18
+        # parent_frame: global/frame used for planning (typically 'map')
+        parent_frame: "map"
+
+      # Solver settings
+      solver:
+        # max_iters: maximum inner optimization iterations per control step
+        max_iters: 8
+        # time_frac: fraction of control period allowed for solver runtime
+        time_frac: 0.5
+
+      # start_type_description_service: enable ROS type description service if required
+      start_type_description_service: true
+      # use_sim_time: set to true to use simulation clock (/clock)
+      use_sim_time: true

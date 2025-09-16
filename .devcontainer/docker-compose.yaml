@@ -1,0 +1,29 @@
+services:
+  optimization_container:
+    image: ros2/optimization
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ros2_optimization_container
+    privileged: true
+    network_mode: host
+    command: /bin/bash
+    tty: true
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ../../ros2_ws:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $XAUTHORITY:/root/.Xauthority
+    environment:
+      QT_X11_NO_MITSHM: 1
+      DISPLAY: $DISPLAY
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      NVIDIA_REQUIRE_CUDA: "cuda>=11.3"

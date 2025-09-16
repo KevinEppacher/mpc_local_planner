@@ -1,0 +1,1 @@
+docker exec -it ros2_optimization_container bash -c "cd /app && exec bash"
